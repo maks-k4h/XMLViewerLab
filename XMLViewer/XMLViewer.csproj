@@ -52,4 +52,10 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0-rc.2.22430.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Data\file1.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

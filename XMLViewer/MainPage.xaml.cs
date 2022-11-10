@@ -1,10 +1,13 @@
-﻿namespace XMLViewer;
+﻿using XMLViewer.lib;
+using XMLViewer.Models;
+
+namespace XMLViewer;
 
 using Controllers;
 
 public partial class MainPage : ContentPage
 {
-    private XMLViewerController _controller;
+    private XmlViewerController _controller;
 
     private ScrollView resultScrollView;
     
@@ -12,7 +15,7 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
 
-        _controller = new XMLViewerController();
+        _controller = new XmlViewerController();
 
         RenderPage();
 
@@ -39,13 +42,18 @@ public partial class MainPage : ContentPage
         {
             Items =
             {
-                "LINQ",
-                "SAX",
-                "DOM"
+                ((lib.AnalyzerContext.XmlAnalysisStrategy)0).ToString(),
+                ((lib.AnalyzerContext.XmlAnalysisStrategy)1).ToString(),
+                ((lib.AnalyzerContext.XmlAnalysisStrategy)2).ToString(),
             },
-            SelectedIndex = 0,
+            Title = "select",
             FontSize = 18,
             TextColor = Colors.Black,
+        };
+
+        parseMethodSelector.SelectedIndexChanged += (sender, args) =>
+        {
+            _controller.SetMethod((AnalyzerContext.XmlAnalysisStrategy)parseMethodSelector.SelectedIndex);
         };
 
         resultScrollView = new ScrollView();
@@ -82,31 +90,94 @@ public partial class MainPage : ContentPage
 
     private void RenderResult()
     {
-        resultScrollView.Content = new VerticalStackLayout
+        var stackLayout = new VerticalStackLayout
         {
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
-            new Label{Text = _controller.TestResult, FontSize = 50},
+            Spacing = 10,
+            Padding = 15
         };
-        
+        if (_controller.Result != null)
+            foreach (var article in _controller.Result)
+            {
+                stackLayout.Add(GetArticleRepresentation(article));
+            }
+
+        resultScrollView.Content = stackLayout;
     }
 
-    private Grid GetTextFilerElement(string filterName, XMLViewerController.TextSetter textSetter, XMLViewerController.FilterUseSetter filterUseSetter)
+    private IView GetArticleRepresentation(Article article)
+    {
+        var stackView = new VerticalStackLayout
+        {
+            Spacing  = 5,
+        };
+        
+        // Title
+        stackView.Add(new Label
+        {
+            Text = article.Title,
+            FontSize = 28
+        });
+        
+        // Visual line
+        stackView.Add(new BoxView{Color = Color.FromHex("#f7ae48"), HeightRequest = 3});
+        
+        // Annotation
+        stackView.Add(new Label
+        {
+            Text = article.Annotation,
+            FontSize = 19,
+        });
+        
+        // Category
+        stackView.Add(new Label
+        {
+            Text = "Category: " + article.Category,
+            FontSize = 19,
+        });
+        
+        // Author
+        stackView.Add(new Label
+        {
+            Text = "By " + article.Author,
+            FontSize = 19,
+        });
+        
+        // Stack of reviews
+        var reviewsView = new VerticalStackLayout
+        {
+            Padding = new Thickness(5,0)
+        };
+        
+        foreach (var review in article.Reviews)
+        {
+            // every review
+            reviewsView.Add(new HorizontalStackLayout
+            {
+                HeightRequest = 30,
+                Spacing = 5,
+                Children =
+                {
+                    new Image
+                    {
+                        Source = "quote.png",
+                        HeightRequest = 15,
+                        WidthRequest = 17,
+                        HorizontalOptions = LayoutOptions.Start
+                    },
+                    new Label { Text = review.Text, FontSize = 19, VerticalOptions = LayoutOptions.End},
+                }
+            });
+        }
+        
+        stackView.Add(reviewsView);
+        
+        return new Frame
+        {
+            Content = stackView
+        };
+    }
+
+    private Grid GetTextFilerElement(string filterName, XmlViewerController.TextSetter textSetter, XmlViewerController.FilterUseSetter filterUseSetter)
     {
         var filterGrid = new Grid
         {
@@ -137,7 +208,7 @@ public partial class MainPage : ContentPage
         return filterGrid;
     }
     
-    private HorizontalStackLayout GetDateFilerElement(string filterName, XMLViewerController.DateSetter dateSetter, XMLViewerController.FilterUseSetter filterUseSetter)
+    private HorizontalStackLayout GetDateFilerElement(string filterName, XmlViewerController.DateSetter dateSetter, XmlViewerController.FilterUseSetter filterUseSetter)
     {
         var filterStack = new HorizontalStackLayout()
         {

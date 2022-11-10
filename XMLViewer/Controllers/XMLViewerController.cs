@@ -1,8 +1,11 @@
+using XMLViewer.lib;
+using XMLViewer.Models;
+
 namespace XMLViewer.Controllers;
 
-public class XMLViewerController
+public class XmlViewerController
 {
-    public string TestResult;
+    public List<Article> Result;
     
     public delegate void TextSetter(string s);
     public delegate void DateSetter(DateTime d);
@@ -17,33 +20,37 @@ public class XMLViewerController
     private bool _useFromDateFilter     = false;
     private bool _useToDateFilter       = false;
 
+    private AnalyzerContext _analyzerContext;
+
+    public XmlViewerController()
+    {
+        _analyzerContext = new AnalyzerContext();
+        _analyzerContext.SetStrategy(AnalyzerContext.XmlAnalysisStrategy.Dom);
+        _analyzerContext.SetFilePath("../Data/file1.xml");
+    }
+
     public void SetTitle(string title)
     {
-        TestResult = "Title";
         Run();
     }
 
     public void SetAuthor(string author)
     {
-        TestResult = "Author";
         Run();
     }
 
     public void SetCategory(string category)
     {
-        TestResult = "Category";
         Run();
     }
 
     public void SetFromDate(DateTime formDate)
     {
-        TestResult = "FromDate";
         Run();
     }
 
     public void SetToDate(DateTime toDate)
     {
-        TestResult = "ToDate";
         Run();
     }
     
@@ -77,10 +84,30 @@ public class XMLViewerController
         Run();
     }
 
+    public void SetMethod(AnalyzerContext.XmlAnalysisStrategy strategy)
+    {
+        try
+        {
+            _analyzerContext.SetStrategy(strategy);
+        }
+        catch
+        {
+            // ignored
+        }
+        Run();
+    }
+
     private void Run()
     {
-        if (_useAuthorFilter)
-            TestResult += "hahaha";
+        try
+        {
+            Result = _analyzerContext.Run();
+        }
+        catch
+        {
+            // ignored
+        }
+        
         if (ResultUpdated != null) ResultUpdated();
     }
 

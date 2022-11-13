@@ -8,23 +8,19 @@ using Controllers;
 public partial class MainPage : ContentPage
 {
     private XmlViewerController _controller;
-
-    private ScrollView resultScrollView;
+    private ScrollView _resultScrollView;
     
     public MainPage()
     {
         InitializeComponent();
-
         _controller = new XmlViewerController();
-
         RenderPage();
-
-        _controller.ResultUpdated += RenderResult;
+        _controller.ResultUpdated += RenderResult;  // called on every result update
     }
     
     private void RenderPage()
     {
-        var mainGrid = new Grid
+        var mainGrid = new Grid // backbone grid of the page
         {
             RowDefinitions =
             {
@@ -42,33 +38,23 @@ public partial class MainPage : ContentPage
         {
             Items =
             {
-                ((lib.AnalyzerContext.XmlAnalysisStrategy)0).ToString(),
-                ((lib.AnalyzerContext.XmlAnalysisStrategy)1).ToString(),
-                ((lib.AnalyzerContext.XmlAnalysisStrategy)2).ToString(),
+                ((AnalyzerContext.XmlAnalysisStrategy)0).ToString(),
+                ((AnalyzerContext.XmlAnalysisStrategy)1).ToString(),
+                ((AnalyzerContext.XmlAnalysisStrategy)2).ToString(),
             },
             Title = "select",
-            FontSize = 18,
+            FontSize = 20,
+            Margin = new Thickness(0, 3, 0, 0),
             TextColor = Colors.Black,
         };
 
         parseMethodSelector.SelectedIndexChanged += (sender, args) =>
-        {
-            _controller.SetMethod((AnalyzerContext.XmlAnalysisStrategy)parseMethodSelector.SelectedIndex);
-        };
+        { _controller.SetMethod((AnalyzerContext.XmlAnalysisStrategy)parseMethodSelector.SelectedIndex); };
 
-        resultScrollView = new ScrollView();
+        _resultScrollView = new ScrollView();
         
-        mainGrid.SetRowSpan(resultScrollView, 2);
-        mainGrid.Add(resultScrollView, 1);
-        mainGrid.Add(new HorizontalStackLayout
-        { 
-            Margin = 20, 
-            Children = 
-            {
-               new Label{Text = "Method: ", FontSize = 23},
-               parseMethodSelector,
-            }
-        }, 0, 1);
+        mainGrid.SetRowSpan(_resultScrollView, 2);
+        mainGrid.Add(_resultScrollView, 1);
         mainGrid.Add(new VerticalStackLayout
         {
             Padding = 20,
@@ -76,14 +62,23 @@ public partial class MainPage : ContentPage
             Children =
             {
                 new Label{Text = "Filters", FontSize = 30},
-                GetTextFilerElement("Title",    _controller.SetTitle,       _controller.SetTitleFilterUse),
-                GetTextFilerElement("Author",   _controller.SetAuthor,      _controller.SetAuthorFilterUse),
-                GetTextFilerElement("Category", _controller.SetCategory,    _controller.SetCategoryFilterUse),
-                GetDateFilerElement("From",     _controller.SetFromDate,    _controller.SetFromDateFilterUse),
-                GetDateFilerElement("To",       _controller.SetToDate,      _controller.SetToDateFilterUse),
+                GetTextFilterElement("Title",    _controller.SetTitleFilter,    _controller.SetTitleFilterUse),
+                GetTextFilterElement("Author",   _controller.SetAuthorFilter,   _controller.SetAuthorFilterUse),
+                GetTextFilterElement("Category", _controller.SetCategoryFilter, _controller.SetCategoryFilterUse),
+                GetDateFilterElement("From",     _controller.SetFromDateFilter, _controller.SetFromDateFilterUse,   new DateTime(2000, 1, 1)),
+                GetDateFilterElement("To",       _controller.SetToDateFilter,   _controller.SetToDateFilterUse,     DateTime.Now),
             }
         }, 0);
-        
+        mainGrid.Add(new HorizontalStackLayout
+        { 
+            Margin = 20, 
+            Children = 
+            {
+                new Label{Text = "Method: ", FontSize = 23},
+                parseMethodSelector,
+            }
+        }, 0, 1);
+
 
         Content = mainGrid;
     }
@@ -101,52 +96,34 @@ public partial class MainPage : ContentPage
                 stackLayout.Add(GetArticleRepresentation(article));
             }
 
-        resultScrollView.Content = stackLayout;
+        _resultScrollView.Content = stackLayout;
     }
 
     private IView GetArticleRepresentation(Article article)
     {
-        var stackView = new VerticalStackLayout
-        {
-            Spacing  = 5,
-        };
+        var stackView = new VerticalStackLayout { Spacing  = 5 };
         
         // Title
-        stackView.Add(new Label
-        {
-            Text = article.Title,
-            FontSize = 28
-        });
+        stackView.Add(new Label { Text = article.Title, FontSize = 28 });
         
         // Visual line
-        stackView.Add(new BoxView{Color = Color.FromHex("#f7ae48"), HeightRequest = 3});
+        stackView.Add(new BoxView { Color = Color.FromHex("#f7ae48"), HeightRequest = 3 });
         
         // Annotation
-        stackView.Add(new Label
-        {
-            Text = article.Annotation,
-            FontSize = 19,
-        });
+        stackView.Add(new Label { Text = article.Annotation, FontSize = 19 });
         
         // Category
-        stackView.Add(new Label
-        {
-            Text = "Category: " + article.Category,
-            FontSize = 19,
-        });
+        stackView.Add(new Label { Text = "Category: " + article.Category, FontSize = 19, });
         
+        // Date
+        if (article.Date != null)
+            stackView.Add(new Label { Text = "Date: " + article.Date.Value.ToShortDateString(), FontSize = 19, });
+
         // Author
-        stackView.Add(new Label
-        {
-            Text = "By " + article.Author,
-            FontSize = 19,
-        });
+        stackView.Add(new Label { Text = "By " + article.Author, FontSize = 19, });
         
         // Stack of reviews
-        var reviewsView = new VerticalStackLayout
-        {
-            Padding = new Thickness(5,0)
-        };
+        var reviewsView = new VerticalStackLayout { Padding = new Thickness(5,0) };
         
         foreach (var review in article.Reviews)
         {
@@ -158,26 +135,27 @@ public partial class MainPage : ContentPage
                 Children =
                 {
                     new Image
-                    {
+                    { 
                         Source = "quote.png",
                         HeightRequest = 15,
                         WidthRequest = 17,
                         HorizontalOptions = LayoutOptions.Start
                     },
-                    new Label { Text = review.Text, FontSize = 19, VerticalOptions = LayoutOptions.End},
+                    new Label
+                    {
+                        Text = review.Text, 
+                        FontSize = 19, 
+                        VerticalOptions = LayoutOptions.End
+                    },
                 }
             });
         }
         
         stackView.Add(reviewsView);
-        
-        return new Frame
-        {
-            Content = stackView
-        };
+        return new Frame { Content = stackView };
     }
 
-    private Grid GetTextFilerElement(string filterName, XmlViewerController.TextSetter textSetter, XmlViewerController.FilterUseSetter filterUseSetter)
+    private Grid GetTextFilterElement(string filterName, XmlViewerController.TextSetter textSetter, XmlViewerController.FilterUseSetter filterUseSetter)
     {
         var filterGrid = new Grid
         {
@@ -208,7 +186,7 @@ public partial class MainPage : ContentPage
         return filterGrid;
     }
     
-    private HorizontalStackLayout GetDateFilerElement(string filterName, XmlViewerController.DateSetter dateSetter, XmlViewerController.FilterUseSetter filterUseSetter)
+    private HorizontalStackLayout GetDateFilterElement(string filterName, XmlViewerController.DateSetter dateSetter, XmlViewerController.FilterUseSetter filterUseSetter, DateTime date)
     {
         var filterStack = new HorizontalStackLayout()
         {
@@ -220,9 +198,10 @@ public partial class MainPage : ContentPage
         var checkBox = new CheckBox();
         var picker = new DatePicker
         {
-            FontSize = 20, 
+            Date = date,
             FontFamily = "OpenSansRegular", 
-            Margin = new Thickness(10, 8, 0, 0)
+            Margin = new Thickness(10, 7, 0, 0),
+            TextColor = Colors.Black
         };
         
         picker.DateSelected += (sender, args) => { dateSetter(picker.Date); };

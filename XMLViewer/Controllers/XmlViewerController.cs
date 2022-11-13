@@ -10,77 +10,74 @@ public class XmlViewerController
     public delegate void TextSetter(string s);
     public delegate void DateSetter(DateTime d);
     public delegate void FilterUseSetter(bool b);
-
     public delegate void ResultUpdatedHandler();
+    
     public event ResultUpdatedHandler ResultUpdated;
-
-    private bool _useTitleFilter        = false;
-    private bool _useAuthorFilter       = false;
-    private bool _useCategoryFilter     = false;
-    private bool _useFromDateFilter     = false;
-    private bool _useToDateFilter       = false;
 
     private AnalyzerContext _analyzerContext;
 
     public XmlViewerController()
     {
         _analyzerContext = new AnalyzerContext();
-        _analyzerContext.SetStrategy(AnalyzerContext.XmlAnalysisStrategy.Dom);
-        _analyzerContext.SetFilePath("../Data/file1.xml");
     }
 
-    public void SetTitle(string title)
+    public void SetTitleFilter(string title)
     {
+        _analyzerContext.SetTitleFilter(title);
         Run();
     }
 
-    public void SetAuthor(string author)
+    public void SetAuthorFilter(string author)
     {
+        _analyzerContext.SetAuthorFilter(author);
         Run();
     }
 
-    public void SetCategory(string category)
+    public void SetCategoryFilter(string category)
     {
+        _analyzerContext.SetCategoryFilter(category);
         Run();
     }
 
-    public void SetFromDate(DateTime formDate)
+    public void SetFromDateFilter(DateTime formDate)
     {
+        _analyzerContext.SetFromDateFilter(formDate);
         Run();
     }
 
-    public void SetToDate(DateTime toDate)
+    public void SetToDateFilter(DateTime toDate)
     {
+        _analyzerContext.SetToDateFilter(toDate);
         Run();
     }
     
     public void SetTitleFilterUse(bool b)
     {
-        _useTitleFilter = b;
+        _analyzerContext.SetTitleFilterUse(b);
         Run();
     }
     
     public void SetAuthorFilterUse(bool b)
     {
-        _useAuthorFilter = b;
+        _analyzerContext.SetAuthorFilterUse(b);
         Run();
     }
     
     public void SetCategoryFilterUse(bool b)
     {
-        _useCategoryFilter = b;
+        _analyzerContext.SetCategoryFilterUse(b);
         Run();
     }
     
     public void SetFromDateFilterUse(bool b)
     {
-        _useFromDateFilter = b;
+        _analyzerContext.SetFromDateFilterUse(b);
         Run();
     }
     
     public void SetToDateFilterUse(bool b)
     {
-        _useToDateFilter = b;
+        _analyzerContext.SetToDateFilterUse(b);
         Run();
     }
 
@@ -89,6 +86,7 @@ public class XmlViewerController
         try
         {
             _analyzerContext.SetStrategy(strategy);
+            _analyzerContext.SetFilePath("../Data/file1.xml");
         }
         catch
         {
@@ -107,8 +105,8 @@ public class XmlViewerController
         {
             // ignored
         }
-        
-        if (ResultUpdated != null) ResultUpdated();
+
+        ResultUpdated?.Invoke();
     }
 
 }

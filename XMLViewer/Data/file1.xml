@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NewspaperData>
+    
     <Article>
-        
+        <Title>Applications of gradient-based optimization methods in psychology</Title>
+        <Annotation>Find the gradient of your happiness!</Annotation>
+        <Author>Julian Mandison</Author>
+        <Date>1/1/2016</Date>
+        <Reviews>
+            <Review>It's a good read!</Review>
+            <Review>Worth every spent minute!</Review>
+            <Review>Too much beating around the bush...</Review>
+        </Reviews>
     </Article>
+
+    <Article>
+        <Title>Does LSTM still make it?</Title>
+        <Annotation>What is the role of LSTMs in the real applications?</Annotation>
+        <Author>Antonio Armstrong</Author>
+        <Date>3/5/2017</Date>
+        <Reviews>
+            <Review>It's a good read!</Review>
+            <Review>Worth every spent minute!</Review>
+            <Review>Too much beating around the bush...</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>Sleep and how to purge of it</Title>
+        <Annotation>Have you ever wondered if math logic is the only thing that makes you drawl?</Annotation>
+        <Author>Bou Door</Author>
+        <Date>8/13/2018</Date>
+        <Reviews>
+            <Review>You are absolutely off, guys!</Review>
+            <Review>Too much beating around the bush...</Review>
+        </Reviews>
+    </Article>
+    
 </NewspaperData>

@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace XMLViewer.Models;
 
 public class Article

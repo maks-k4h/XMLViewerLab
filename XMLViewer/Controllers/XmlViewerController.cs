@@ -34,31 +34,36 @@ public class XmlViewerController
     public void SetTitleFilter(string title)
     {
         _analyzerContext.SetTitleFilter(title);
-        Run();
+        if (_analyzerContext.GetTitleFilterUse())
+            Run();
     }
 
     public void SetAuthorFilter(string author)
     {
         _analyzerContext.SetAuthorFilter(author);
-        Run();
+        if (_analyzerContext.GetAuthorFilterUse())
+            Run();
     }
 
     public void SetCategoryFilter(string category)
     {
         _analyzerContext.SetCategoryFilter(category);
-        Run();
+        if (_analyzerContext.GetCategoryFilterUse())
+            Run();
     }
 
     public void SetFromDateFilter(DateTime formDate)
     {
         _analyzerContext.SetFromDateFilter(formDate);
-        Run();
+        if (_analyzerContext.GetFromDateFilterUse())
+            Run();
     }
 
     public void SetToDateFilter(DateTime toDate)
     {
         _analyzerContext.SetToDateFilter(toDate);
-        Run();
+        if (_analyzerContext.GetToDateFilterUse())
+            Run();
     }
     
     public void SetTitleFilterUse(bool b)

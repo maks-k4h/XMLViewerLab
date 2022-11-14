@@ -1,5 +1,6 @@
 ﻿using XMLViewer.lib;
 using XMLViewer.Models;
+using static XMLViewer.Controllers.XmlViewerController;
 
 namespace XMLViewer;
 
@@ -154,7 +155,7 @@ public partial class MainPage : ContentPage
         return new Frame { Content = stackView };
     }
 
-    private Grid GetTextFilterElement(string filterName, XmlViewerController.TextSetter textSetter, XmlViewerController.FilterUseSetter filterUseSetter)
+    private Grid GetTextFilterElement(string filterName, TextSetter textSetter, FilterUseSetter filterUseSetter)
     {
         var filterGrid = new Grid
         {
@@ -176,7 +177,12 @@ public partial class MainPage : ContentPage
         var entry = new Entry { BackgroundColor = Colors.WhiteSmoke, FontSize = 20 };
         
         entry.Completed += async (sender, args) => { textSetter(entry.Text); };
-        checkBox.CheckedChanged += async (sender, e) => { filterUseSetter(e.Value); };
+        checkBox.CheckedChanged += async (sender, e) =>
+        {
+            if (e.Value)                    // it's possible that the used haven't pressed Enter yet,
+                textSetter(entry.Text);     // so if the filter is to be used we set the filter parameter here
+            filterUseSetter(e.Value);
+        };
         
         filterGrid.Add(checkBox, 0);
         filterGrid.Add(label, 1);
@@ -185,7 +191,8 @@ public partial class MainPage : ContentPage
         return filterGrid;
     }
     
-    private HorizontalStackLayout GetDateFilterElement(string filterName, XmlViewerController.DateSetter dateSetter, XmlViewerController.FilterUseSetter filterUseSetter, DateTime date)
+    private HorizontalStackLayout GetDateFilterElement(string filterName, 
+        DateSetter dateSetter, FilterUseSetter filterUseSetter, DateTime date)
     {
         var filterStack = new HorizontalStackLayout()
         {
@@ -205,6 +212,9 @@ public partial class MainPage : ContentPage
         
         picker.DateSelected += (sender, args) => { dateSetter(picker.Date); };
         checkBox.CheckedChanged += (sender, e) => { filterUseSetter(e.Value); };
+        
+        // setting default date 
+        dateSetter(picker.Date);
         
         filterStack.Add(checkBox);
         filterStack.Add(label);

@@ -1,3 +1,4 @@
+using XMLTest.lib;
 using XMLViewer.Models;
 
 namespace XMLViewer.lib;
@@ -5,14 +6,19 @@ namespace XMLViewer.lib;
 // The context for simple interaction with strategies
 public class AnalyzerContext
 {
-    private IAnalyzer _analyzer;
-    private string _filePath;
+    private XmlAnalyzerStrategy _analyzer;
+    private ArticleFilter _filter;
     
     public enum XmlAnalysisStrategy
     {
         Dom,
         Linq,
         Sax
+    }
+
+    public AnalyzerContext()
+    {
+        _filter = new ArticleFilter();
     }
 
     public void SetStrategy(XmlAnalysisStrategy s)
@@ -25,7 +31,8 @@ public class AnalyzerContext
             case XmlAnalysisStrategy.Linq:
                 throw new NotImplementedException();
             case XmlAnalysisStrategy.Sax:
-                throw new NotImplementedException();
+                _analyzer = new SaxAnalyzer();
+                break;
             default:
                 throw new NotImplementedException();
         }
@@ -33,11 +40,61 @@ public class AnalyzerContext
 
     public void SetFilePath(string path)
     {
-        _filePath = path;
+        _analyzer?.SetFilePath(path);
     }
 
     public List<Article> Run()
     {
-        return _analyzer.Analyze(_filePath);
+        return _analyzer.Analyze(_filter);
+    }
+    
+    public void SetTitleFilter(string s)
+    {
+        _filter.TitleFilter = s;
+    }
+
+    public void SetTitleFilterUse(bool b)
+    {
+        _filter.UseTitleFilter = b;
+    }
+    
+    public void SetAuthorFilter(string s)
+    {
+        _filter.AuthorFilter = s;
+    }
+
+    public void SetAuthorFilterUse(bool b)
+    {
+        _filter.UseAuthorFilter = b;
+    }
+
+    public void SetCategoryFilter(string s)
+    {
+        _filter.CategoryFilter = s;
+    }
+    
+    public void SetCategoryFilterUse(bool b)
+    {
+        _filter.UseCategoryFilter = b;
+    }
+
+    public void SetFromDateFilter(DateTime? date)
+    {
+        _filter.FromDateFilter = date;
+    }
+    
+    public void SetFromDateFilterUse(bool b)
+    {
+        _filter.UseFromDateFilter = b;
+    }
+    
+    public void SetToDateFilter(DateTime? date)
+    {
+        _filter.ToDateFilter = date;
+    }
+    
+    public void SetToDateFilterUse(bool b)
+    {
+        _filter.UseToDateFilter = b;
     }
 }

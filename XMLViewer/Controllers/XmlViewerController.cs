@@ -21,6 +21,16 @@ public class XmlViewerController
         _analyzerContext = new AnalyzerContext();
     }
 
+    // returns a path to the created html file.
+    public string ExportHtml()
+    {
+        string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string path = Path.Combine(appDataPath, "exp.html");
+        
+        HtmlExporter.Export(Result, path);
+        return path;
+    }
+
     public void SetTitleFilter(string title)
     {
         _analyzerContext.SetTitleFilter(title);
@@ -95,11 +105,11 @@ public class XmlViewerController
         Run();
     }
 
-    private void Run()
+    private async void Run()
     {
         try
         {
-            Result = _analyzerContext.Run();
+            Result = await Task.Run(() => _analyzerContext.Run());
         }
         catch
         {
@@ -108,5 +118,4 @@ public class XmlViewerController
 
         ResultUpdated?.Invoke();
     }
-
 }

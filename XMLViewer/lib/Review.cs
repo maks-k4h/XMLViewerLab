@@ -1,6 +1,6 @@
 namespace XMLViewer.Models;
 
-public struct Review
+public class Review
 {
     public string Text;
 }

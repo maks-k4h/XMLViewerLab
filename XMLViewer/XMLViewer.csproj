@@ -58,4 +58,17 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <MauiXaml Update="HelpPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="HelpPage.xaml.cs">
+        <DependentUpon>HelpPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
 </Project>

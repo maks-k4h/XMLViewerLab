@@ -78,8 +78,7 @@ public partial class MainPage : ContentPage
                 parseMethodSelector,
             }
         }, 0, 1);
-
-
+        
         Content = mainGrid;
     }
 
@@ -176,8 +175,8 @@ public partial class MainPage : ContentPage
         var label = new Label { FontSize = 22, Text = filterName };
         var entry = new Entry { BackgroundColor = Colors.WhiteSmoke, FontSize = 20 };
         
-        entry.Completed += (sender, args) => { textSetter(entry.Text); };
-        checkBox.CheckedChanged += (sender, e) => { filterUseSetter(e.Value); };
+        entry.Completed += async (sender, args) => { textSetter(entry.Text); };
+        checkBox.CheckedChanged += async (sender, e) => { filterUseSetter(e.Value); };
         
         filterGrid.Add(checkBox, 0);
         filterGrid.Add(label, 1);
@@ -212,5 +211,16 @@ public partial class MainPage : ContentPage
         filterStack.Add(picker);
 
         return filterStack;
+    }
+
+    private async void ExportClicked(object sender, EventArgs e)
+    {
+        var path = _controller.ExportHtml();
+        await Launcher.Default.OpenAsync("file://" + path);
+    }
+
+    private async void GetHelpClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(HelpPage));
     }
 }

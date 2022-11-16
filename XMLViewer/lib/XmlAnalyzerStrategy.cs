@@ -1,19 +1,17 @@
-using XMLTest.lib;
-
 namespace XMLViewer.lib;
 
 // Strategy
 public abstract class XmlAnalyzerStrategy
 {
-    public const string DateFormat = "dd.MM.yyyy";
+    protected const string DateFormat = "dd.MM.yyyy";
     
-    protected string _filePath;
+    protected string FilePath;
 
     public void SetFilePath(string path)
     {
-        _filePath = path;
+        FilePath = path;
     }
 
-    public abstract List<Models.Article> Analyze(ArticleFilter filter);
+    public abstract List<Article> Analyze(ArticleFilter filter);
 }
 

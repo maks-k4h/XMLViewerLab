@@ -14,6 +14,9 @@ public class XmlViewerController
     
     public event ResultUpdatedHandler ResultUpdated;
 
+    public delegate void ShowErrorMessageHandler(string m);
+    public event ShowErrorMessageHandler ShowError;
+
     private AnalyzerContext _analyzerContext;
 
     public XmlViewerController()
@@ -21,7 +24,7 @@ public class XmlViewerController
         _analyzerContext = new AnalyzerContext();
     }
 
-    // returns a path to the created html file.
+    // returns the path to the created html file.
     public string ExportHtml()
     {
         string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -29,6 +32,18 @@ public class XmlViewerController
         
         HtmlExporter.Export(Result, path);
         return path;
+    }
+
+    public async Task Update()
+    {
+        await Run();
+    }
+    
+    public void CleanResult()
+    {
+        Result = new List<Article>();
+        if (ResultUpdated != null) 
+            ResultUpdated();
     }
 
     public void SetTitleFilter(string title)
@@ -101,7 +116,6 @@ public class XmlViewerController
         try
         {
             _analyzerContext.SetStrategy(strategy);
-            _analyzerContext.SetFilePath("../Data/file1.xml");
         }
         catch
         {
@@ -110,16 +124,22 @@ public class XmlViewerController
         Run();
     }
 
-    private async void Run()
+    private async Task Run()
     {
         try
         {
+            _analyzerContext.SetFilePath(Data.FileInfo.FilePath);
             Result = await Task.Run(() => _analyzerContext.Run());
+            
+            ShowError?.Invoke("");  // all-fine, display no error
         }
         catch
         {
-            // ignored
+            ShowError?.Invoke("Cannot open the file.");
+            Result = new List<Article>();
         }
+        
+        
 
         ResultUpdated?.Invoke();
     }

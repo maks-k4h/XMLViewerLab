@@ -1,24 +1,20 @@
 using System.Globalization;
 using System.Text;
 using System.Xml;
-using XMLTest.lib;
-using XMLViewer.Models;
 
-namespace XMLViewer.lib;
+namespace XMLViewer.lib.ConcreteStrategies;
 
 public class SaxAnalyzer : XmlAnalyzerStrategy
 {
     public override List<Article> Analyze(ArticleFilter filter)
     {
-        List<Article> result = new List<Article>();
-
-        var reader = new XmlTextReader(_filePath);
+        var result = new List<Article>();
+        var reader = new XmlTextReader(FilePath);
+        
         while (reader.Read())
         {
             if (reader.Name == "NewspaperData" && reader.NodeType == XmlNodeType.Element)
-            {
                 ReadNewspaperData(result, reader, filter);
-            }
         }
 
         return result;
@@ -29,75 +25,53 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
         while (reader.Read())
         {
             if (reader.Name == "Article" && reader.NodeType == XmlNodeType.Element)
-            {
                 ReadArticle(articles, reader, filter);
-            }
         }
     }
 
     private void ReadArticle(List<Article> articles, XmlTextReader reader, ArticleFilter filter)
     {
-        Article article = new Article();
+        var article = new Article();
         while (reader.Read())
         {
             if (reader.Name == "Article" && reader.NodeType == XmlNodeType.EndElement)
-                break;  // finished
+                break;  // finished reading the article
 
-            if (!ReadAttribute(article, reader, filter))
-                return; // failed
+            ReadAttribute(article, reader);
         }
         
-        // succeeded, adding new article to the list
-        articles.Add(article);
+        if (IsArticleAcceptable(article, filter))   // filtering
+            articles.Add(article);
     }
 
-    private bool ReadAttribute(Article article, XmlTextReader reader, ArticleFilter filter)
+    private void ReadAttribute(Article article, XmlTextReader reader)
     {
         switch (reader.Name)
         {
             case "Title":
-            {
-                if (!ReadTitle(article, reader, filter))
-                    return false;
+                ReadTitle(article, reader);
                 break;
-            }
             case "Annotation":
-                // no annotations filters — no need to check validity
                 ReadAnnotation(article, reader);
                 break;
             case "Category":
-            {
-                if (!ReadCategory(article, reader, filter))
-                    return false;
+                ReadCategory(article, reader);
                 break;
-            }
             case "Author":
-            {
-                if (!ReadAuthor(article, reader, filter))
-                    return false;
+                ReadAuthor(article, reader);
                 break;
-            }
             case "Date":
-            {
-                if (!ReadDate(article, reader, filter))
-                    return false;
+                ReadDate(article, reader);
                 break;
-            }
             case "Reviews":
-                // no reviews filters — no need to check validity
                 ReadReviews(article, reader);
                 break;
-            default:
-                // ignored
-                break;
         }
-
-        return true; // reading an attribute succeeded
     }
 
-    private bool ReadTitle(Article article, XmlTextReader reader, ArticleFilter filter)
+    private static void ReadTitle(Article article, XmlTextReader reader)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (reader.Read())
         {
@@ -107,20 +81,12 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
             stringBuilder.Append(reader.Value);
         }
         
-        article.Title = stringBuilder.ToString() + "s"; // TODO: remove 's'
-        
-        // filtering
-        if (filter.UseTitleFilter 
-            && filter.TitleFilter.Length > 0
-            && !article.Title.ToLower().Contains(filter.TitleFilter) || article.Title.Length == 0)
-            return false;
-        
-        return true;
+        article.Title = stringBuilder + "s"; // TODO: remove 's'
     }
     
-    private void ReadAnnotation(Article article, XmlTextReader reader)
+    private static void ReadAnnotation(Article article, XmlTextReader reader)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (reader.Read())
         {
@@ -133,9 +99,9 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
         article.Annotation = stringBuilder.ToString();
     }
     
-    private bool ReadCategory(Article article, XmlTextReader reader, ArticleFilter filter)
+    private static void ReadCategory(Article article, XmlTextReader reader)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (reader.Read())
         {
@@ -146,19 +112,11 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
         }
         
         article.Category = stringBuilder.ToString();
-        
-        // filtering
-        if (filter.UseCategoryFilter 
-            && filter.CategoryFilter.Length > 0
-            && !article.Category.ToLower().Contains(filter.CategoryFilter) || article.Category.Length == 0)
-            return false;
-
-        return true;
     }
     
-    private bool ReadAuthor(Article article, XmlTextReader reader, ArticleFilter filter)
+    private static void ReadAuthor(Article article, XmlTextReader reader)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (reader.Read())
         {
@@ -169,17 +127,9 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
         }
         
         article.Author = stringBuilder.ToString();
-        
-        // filtering
-        if (filter.UseAuthorFilter 
-            && filter.AuthorFilter.Length > 0 
-            && !article.Author.ToLower().Contains(filter.AuthorFilter) || article.Author.Length == 0)
-            return false;
-
-        return true;
     }
 
-    private bool ReadDate(Article article, XmlTextReader reader, ArticleFilter filter)
+    private static void ReadDate(Article article, XmlTextReader reader)
     {
         DateTime? date = null;
         
@@ -198,19 +148,12 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
         }
 
         article.Date = date;
-        
-        // filtering
-        if (filter.UseFromDateFilter && date < filter.FromDateFilter)
-            return false;
-        if (filter.UseToDateFilter && date > filter.ToDateFilter)
-            return false;
-
-        return true;
     }
 
-    private void ReadReviews(Article article, XmlTextReader reader)
+    private static void ReadReviews(Article article, XmlTextReader reader)
     {
-        List<Review> reviews = new List<Review>();
+        var reviews = new List<Review>();
+        
         while (reader.Read())
         {
             if (reader.Name == "Reviews" && reader.NodeType == XmlNodeType.EndElement)
@@ -222,9 +165,9 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
         article.Reviews = reviews;
     }
 
-    private void ReadReview(List<Review> reviews, XmlTextReader reader)
+    private static void ReadReview(List<Review> reviews, XmlTextReader reader)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
         while (reader.Read())
         {
@@ -234,5 +177,31 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
             stringBuilder.Append(reader.Value);
         }
         reviews.Add(new Review{ Text = stringBuilder.ToString() });
+    }
+    
+    private static bool IsArticleAcceptable(Article article, ArticleFilter filter)
+    {
+        // title filter
+        if (filter.UseTitleFilter 
+            && filter.TitleFilter.Length > 0
+            && (article.Title.Length == 0 || !article.Title.ToLower().Contains(filter.TitleFilter)))
+            return false;
+        // category filter
+        if (filter.UseCategoryFilter 
+            && filter.CategoryFilter.Length > 0
+            && (article.Category.Length == 0 || !article.Category.ToLower().Contains(filter.CategoryFilter)))
+            return false;
+        // author filter
+        if (filter.UseAuthorFilter 
+            && filter.AuthorFilter.Length > 0
+            && (article.Author.Length == 0 || !article.Author.ToLower().Contains(filter.AuthorFilter)))
+            return false;
+        // date filter
+        if (article.Date != null &&
+            (filter.UseFromDateFilter && article.Date < filter.FromDateFilter ||
+             filter.UseToDateFilter && article.Date > filter.ToDateFilter))
+            return false;
+
+        return true;    // passed all filters
     }
 }

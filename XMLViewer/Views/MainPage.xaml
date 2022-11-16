@@ -5,9 +5,12 @@
 
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
-            <MenuFlyoutItem Text="Export"
+            <MenuFlyoutItem Text="Import XML file"
+                            Clicked="ImportClicked" />
+            <MenuFlyoutItem Text="Export as HTML"
                             Clicked="ExportClicked" />
         </MenuBarItem>
+        
         <MenuBarItem Text="Help">
             <MenuFlyoutItem Text="How does it work?"
                             Clicked="GetHelpClicked" />

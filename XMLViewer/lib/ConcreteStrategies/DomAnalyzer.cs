@@ -7,7 +7,7 @@ namespace XMLViewer.lib;
 
 public class DomAnalyzer : XmlAnalyzerStrategy
 {
-    private XmlDocument _document = new XmlDocument();
+    private readonly XmlDocument _document = new XmlDocument();
     private string _pathCache = "";
     
     public override List<Article> Analyze(ArticleFilter filter)
@@ -24,8 +24,8 @@ public class DomAnalyzer : XmlAnalyzerStrategy
             foreach (XmlNode articleNode in node.ChildNodes)
             {
                 var a = ReadArticle(articleNode, filter);
-                if (a == null) continue;
-                list.Add((Article)a);
+                if (a != null)
+                    list.Add(a);
             }
         }
 
@@ -34,27 +34,23 @@ public class DomAnalyzer : XmlAnalyzerStrategy
 
     private Article? ReadArticle(XmlNode node, ArticleFilter filter)
     {
-        Article article = new Article();
+        var article = new Article();
+        
         foreach (XmlNode child in node.ChildNodes)
         {
-            if (!ReadAttribute(child, article, filter))
-                return null;
+            ReadAttribute(child, article);
         }
-
-        return article;
+        
+        return IsArticleAcceptable(article, filter) ? article : null;
     }
 
-    private bool ReadAttribute(XmlNode node, Article article, ArticleFilter filter)
+    private bool ReadAttribute(XmlNode node, Article article)
     {
         switch (node.Name)
         {
             case "Title":
             {
-                article.Title = node.InnerText + "d";   // TODO: remove 'd'
-                if (filter.UseTitleFilter 
-                    && filter.TitleFilter.Length > 0
-                    && (article.Title.Length == 0 || !article.Title.ToLower().Contains(filter.TitleFilter)))
-                    return false;
+                article.Title = node.InnerText.Trim() + "d";   // TODO: remove 'd'
                 break;
             }
             case "Annotation":
@@ -62,36 +58,21 @@ public class DomAnalyzer : XmlAnalyzerStrategy
                 break;
             case "Category":
             {
-                article.Category = node.InnerText;
-                if (filter.UseCategoryFilter 
-                    && filter.CategoryFilter.Length > 0
-                    && (article.Category.Length == 0 || !article.Category.ToLower().Contains(filter.CategoryFilter)))
-                    return false;
+                article.Category = node.InnerText.Trim();
                 break;
             }
             case "Author":
             {
-                article.Author = node.InnerText;
-                if (filter.UseAuthorFilter 
-                    && filter.AuthorFilter.Length > 0
-                    && (article.Author.Length == 0 || !article.Author.ToLower().Contains(filter.AuthorFilter)))
-                    return false;
+                article.Author = node.InnerText.Trim();
                 break;
             }
             case "Date":
             {
                 article.Date = ReadDate(node);
-                if (article.Date != null &&
-                    (filter.UseFromDateFilter && article.Date < filter.FromDateFilter ||
-                     filter.UseToDateFilter && article.Date > filter.ToDateFilter))
-                    return false;
                 break;
             }
             case "Reviews":
                 article.Reviews = ReadReviews(node);
-                break;
-            default:
-                // ignored
                 break;
         }
 
@@ -104,9 +85,7 @@ public class DomAnalyzer : XmlAnalyzerStrategy
         foreach (XmlNode review in node.ChildNodes)
         {
             if (review.Name == "Review")
-            {
-                reviews.Add(new Review { Text = review.InnerText });
-            }
+                reviews.Add(new Review { Text = review.InnerText.Trim() });
         }
 
         return reviews;
@@ -121,25 +100,51 @@ public class DomAnalyzer : XmlAnalyzerStrategy
         }
         catch (Exception)
         {
-            date = DateTime.Now;
+            date = null;
         }
 
         return date;
     }
 
+    // loads and caches the document if it's not cached yet
     private void LoadDocument()
     {
-        if (_filePath == _pathCache)
+        if (FilePath == _pathCache)
             return;
         try
         {
-            _document.Load(_filePath);
-            _pathCache = _filePath; // updating cache info
+            _document.Load(FilePath);
+            _pathCache = FilePath; // updating cache info
         }
         catch (Exception)
         {
             // ignored
         }
-        
+    }
+
+    private bool IsArticleAcceptable(Article article, ArticleFilter filter)
+    {
+        // title filter
+        if (filter.UseTitleFilter 
+            && filter.TitleFilter.Length > 0
+            && (article.Title.Length == 0 || !article.Title.ToLower().Contains(filter.TitleFilter)))
+            return false;
+        // category filter
+        if (filter.UseCategoryFilter 
+            && filter.CategoryFilter.Length > 0
+            && (article.Category.Length == 0 || !article.Category.ToLower().Contains(filter.CategoryFilter)))
+            return false;
+        // author filter
+        if (filter.UseAuthorFilter 
+            && filter.AuthorFilter.Length > 0
+            && (article.Author.Length == 0 || !article.Author.ToLower().Contains(filter.AuthorFilter)))
+            return false;
+        // date filter
+        if (article.Date != null &&
+            (filter.UseFromDateFilter && article.Date < filter.FromDateFilter ||
+             filter.UseToDateFilter && article.Date > filter.ToDateFilter))
+            return false;
+
+        return true;    // passed all filters
     }
 }

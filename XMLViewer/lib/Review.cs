@@ -1,6 +1,6 @@
-namespace XMLViewer.Models;
+namespace XMLViewer.lib;
 
 public class Review
 {
-    public string Text;
+    public string Text { get; init; }
 }

@@ -9,6 +9,5 @@ public class Help
     public string Title                 => "XmlViewer";
     public string Version               => "1.0";
 
-    public string Description           => "Description Description Description Description Description Description " +
-                                           "Description Description";
+    public string Description           => "In case of any questions, contact the software distributor. The application's purpose is strictly educational.";
 }

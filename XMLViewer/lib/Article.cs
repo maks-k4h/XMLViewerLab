@@ -1,6 +1,4 @@
-using System.Runtime.Serialization;
-
-namespace XMLViewer.Models;
+namespace XMLViewer.lib;
 
 public class Article
 {

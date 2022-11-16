@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XMLViewer.HelpPage"
+             xmlns:models="clr-namespace:XMLViewer.Models"
+             Title="Help">
+    
+    <ContentPage.BindingContext>
+        <models:Help></models:Help>
+    </ContentPage.BindingContext>
+    
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+        
+        <VerticalStackLayout Margin="10">
+            <Label Text="{Binding Title}" FontSize="{Binding TitleFontSize}" FontAttributes="Bold"></Label>
+            <HorizontalStackLayout Margin="3,0,3,20">
+                <Label FontSize="{Binding VersionFontSize}" Text="Version " FontAttributes="Italic" TextColor="Orange"></Label>
+                <Label FontSize="{Binding VersionFontSize}" Text="{Binding Version}" FontAttributes="Italic" TextColor="Orange"></Label>
+            </HorizontalStackLayout>
+        </VerticalStackLayout> 
+        
+        <Label Text="{Binding Description}" Margin="10" FontSize="{Binding DescriptionFontSize}" WidthRequest="700"></Label>
+        <ScrollView HeightRequest="400" WidthRequest="700">
+            <VerticalStackLayout WidthRequest="700" HeightRequest="3000">
+                <Label Margin="0,10" FontSize="30" FontAttributes="Bold">FAQ</Label>
+                
+                <Label Margin="0,10,0,0" FontSize="20">What is XMLViewer?</Label>
+                <Label Text="It's an almost useless app created for the sake of education that can read XML files containing articles from some newspaper. Those articles can than be (almost) efficiently filtered to dig for the ones you're looking up."></Label>
+                <Label Text="You can also transform such XML files to HTML just in app."></Label>
+                
+                <Label Margin="0,10,0,0" FontSize="20">What is the 'method' at the bottom of my screen?</Label>
+                <Label Text="XML Viewer support three methods of the XML file analysis. They work independently, but the final result is the same for any filter setup. "></Label>
+                
+                <Label Margin="0,10,0,0" FontSize="20">Where is the 'Apply' button?</Label>
+                <Label Text="Well, on LinkedIn, of course. Joke. There is no one. Really."></Label>
+                <Label Text="Requests are executed when you set the filters you want to use or press enter button after entering the text. No button is needed, man."></Label>
+                
+                <Label Margin="0,10,0,0" FontSize="20">How to import my XML file?</Label>
+                <Label Text="Click the 'file' menu at the top and select 'import'. You will be redirected to a page where you will be asked enter the absolute path to the file. You can get one by right-clicking (if you still use one of those mouses) on the file."></Label>
+                
+                <Label Margin="0,10,0,0" FontSize="20">How to export XML files to HTML?</Label>
+                <Label Text="Click the 'file' menu at the top and select 'export to HTML'. You will be redirected to a web browser where you can see the result."></Label>
+                
+                <Label Margin="0,10,0,0" FontSize="20">Why my XML file cannot be opened?</Label>
+                <Label Text="Be sure all opening and closing attributes are present. The analyzer is quite liberal to the names of attributes and reads only those that matter. Try using some text processing app that supports XML format to check for errors."></Label>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentPage>

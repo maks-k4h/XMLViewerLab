@@ -1,9 +1,10 @@
 using XMLTest.lib;
+using XMLViewer.lib.ConcreteStrategies;
 using XMLViewer.Models;
 
 namespace XMLViewer.lib;
 
-// The context for simple interaction with strategies
+// The context for indirect interaction with strategies
 public class AnalyzerContext
 {
     private XmlAnalyzerStrategy _analyzer;
@@ -34,6 +35,7 @@ public class AnalyzerContext
         }
     }
 
+    // must be set every time the strategy is changed
     public void SetFilePath(string path)
     {
         _analyzer?.SetFilePath(path);
@@ -41,7 +43,9 @@ public class AnalyzerContext
 
     public List<Article> Run()
     {
-        return _analyzer.Analyze(_filter);
+        if (_analyzer != null)
+            return _analyzer.Analyze(_filter);
+        return new List<Article>();
     }
     
     public void SetTitleFilter(string s)

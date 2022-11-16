@@ -1,4 +1,4 @@
-namespace XMLTest.lib;
+namespace XMLViewer.lib;
 
 public struct ArticleFilter
 {

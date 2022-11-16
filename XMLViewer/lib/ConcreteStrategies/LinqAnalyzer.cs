@@ -7,13 +7,14 @@ namespace XMLTest.lib;
 
 public class LinqAnalyzer : XmlAnalyzerStrategy
 {
-    private XDocument? _document = null;
-    private string _pathCache = null;
+    private XDocument _document;
+    private string _pathCache;
 
     public override List<Article> Analyze(ArticleFilter filter)
     {
         LoadDocument();
-        List<Article> res = new List<Article>();
+        
+        var res = new List<Article>();
         
         if (_document is null)  // no exception is thrown
             return res;
@@ -52,7 +53,7 @@ public class LinqAnalyzer : XmlAnalyzerStrategy
             // executing and converting to a list
             .ToList();
 
-        foreach (XElement item in matches)
+        foreach (var item in matches)
         {
             res.Add(ArticleFromXElement(item));
         }
@@ -60,21 +61,22 @@ public class LinqAnalyzer : XmlAnalyzerStrategy
         return res;
     }
     
-    private Article ArticleFromXElement(XElement element)
+    private Article ArticleFromXElement(XContainer element)
     {
-        var article = new Article();
+        var article = new Article
+        {
+            Title       = element.Element("Title")?.Value + "l" ?? "", // TODO: remove 'l'
+            Annotation  = element.Element("Annotation")?.Value ?? "",
+            Category    = element.Element("Category")?.Value ?? "",
+            Author      = element.Element("Author")?.Value ?? "",
+            Date        = ParseDateTimeOrNull(element.Element("Date")?.Value),
+            Reviews     = ParseReviewsFromXElement(element.Element("Reviews"))
+        };
 
-        article.Title       = element.Element("Title")?.Value + "l" ?? "";  // TODO: remove 'l'
-        article.Annotation  = element.Element("Annotation")?.Value ?? "";
-        article.Category    = element.Element("Category")?.Value ?? "";
-        article.Author      = element.Element("Author")?.Value ?? "";
-        article.Date        = ParseDateTimeOrNull(element.Element("Date")?.Value);
-        article.Reviews     = ParseReviewsFromXElement(element.Element("Reviews"));
-        
         return article;
     }
 
-    private DateTime? ParseDateTimeOrNull(string? s)
+    private static DateTime? ParseDateTimeOrNull(string? s)
     {
         try
         {
@@ -89,7 +91,7 @@ public class LinqAnalyzer : XmlAnalyzerStrategy
         return null;
     }
 
-    private List<Review> ParseReviewsFromXElement(XElement? element)
+    private static List<Review> ParseReviewsFromXElement(XElement element)
     {
         var res = new List<Review>();
         if (element is null)
@@ -105,13 +107,13 @@ public class LinqAnalyzer : XmlAnalyzerStrategy
 
     private void LoadDocument()
     {
-        if (_filePath == _pathCache)
+        if (FilePath == _pathCache)
             return;
         
         try
         {
-            _document = XDocument.Load(_filePath);
-            _pathCache = _filePath; // updating cache info
+            _document = XDocument.Load(FilePath);
+            _pathCache = FilePath; // updating cache info
         }
         catch (Exception)
         {

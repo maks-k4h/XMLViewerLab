@@ -2,21 +2,22 @@
 <NewspaperData>
     
     <Article>
-        <Title>Applications of gradient-based optimization methods in psychology</Title>
+        <Title>Applications of gradient-based optimization methods in psychology.</Title>
         <Annotation>Find the gradient of your happiness!</Annotation>
-        <Category>Provocative</Category>
+        <Category>Math, optimizatoin, psychology.</Category>
         <Author>Julian Mandison</Author>
         <Date>01.01.2016</Date>
         <Reviews>
-            <Review>It's a good read!</Review>
-            <Review>Worth every spent minute!</Review>
-            <Review>Too much beating around the bush...</Review>
+            <Review>I will definitely recomend it to all my frends.</Review>
+            <Review>Superiour method!</Review>
+            <Review>I simple devoured this excellent article...</Review>
         </Reviews>
     </Article>
 
     <Article>
         <Title>Does LSTM still make it?</Title>
         <Annotation>What is the role of LSTMs in the real applications?</Annotation>
+        <Category>Machine learning, Recurrent Networks.</Category>
         <Author>Antonio Armstrong</Author>
         <Date>03.05.2017</Date>
         <Reviews>
@@ -27,104 +28,53 @@
     </Article>
 
     <Article>
-        <Title>Sleep and how to purge of it</Title>
+        <Title>Sleep and how to purge of it.</Title>
         <Annotation>Have you ever wondered if math logic is the only thing that makes you drawl?</Annotation>
         <Author>Bou Door</Author>
         <Date>08.01.2018</Date>
         <Reviews>
             <Review>You are absolutely off, guys!</Review>
-            <Review>Too much beating around the bush...</Review>
+            <Review>It's beneath criticism...</Review>
         </Reviews>
     </Article>
 
     <Article>
-        <Title>Applications of gradient-based optimization methods in psychology</Title>
+        <Title>How to find time to for traveling?</Title>
+        <Category>Lifestyle</Category>
+        <Author>Marine Kathley</Author>
+        <Date>11.09.2020</Date>
+        <Reviews>
+            <Review>So vividly related, the solution is ingenious.</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>A low-cost robot ready for any obstacle.</Title>
+        <Category>Robotics, Artificial intelligence</Category>
+        <Author>Aaron Aupperlee</Author>
+        <Date>16.11.2022</Date>
+        <Reviews>
+            <Review>Warn you, Skynet is near...</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>Applications of gradient-based optimization methods in psychology.</Title>
         <Annotation>Find the gradient of your happiness!</Annotation>
-        <Category>Provocative</Category>
-        <Author>Julian Mandison</Author>
-        <Date>03.02.2016</Date>
-        <Reviews>
-            <Review>It's a good read!</Review>
-            <Review>Worth every spent minute!</Review>
-            <Review>Too much beating around the bush...</Review>
-        </Reviews>
-    </Article>
-
-    <Article>
-        <Title>Does LSTM still make it?</Title>
-        <Annotation>What is the role of LSTMs in the real applications?</Annotation>
-        <Author>Antonio Armstrong</Author>
-        <Date>01.05.2017</Date>
-        <Reviews>
-            <Review>It's a good read!</Review>
-            <Review>Worth every spent minute!</Review>
-            <Review>Too much beating around the bush...</Review>
-        </Reviews>
-    </Article>
-
-    <Article>
-        <Title>Sleep and how to purge of it</Title>
-        <Annotation>Have you ever wondered if math logic is the only thing that makes you drawl?</Annotation>
-        <Author>Bou Door</Author>
-        <Date>08.12.2018</Date>
-        <Reviews>
-            <Review>You are absolutely off, guys!</Review>
-            <Review>Too much beating around the bush...</Review>
-        </Reviews>
-    </Article>
-
-    <Article>
-        <Title>Applications of gradient-based optimization methods in psychology</Title>
-        <Annotation>Find the gradient of your happiness!</Annotation>
-        <Category>Provocative</Category>
-        <Author>Julian Mandison</Author>
-        <Date>21.01.2016</Date>
-        <Reviews>
-            <Review>It's a good read!</Review>
-            <Review>Worth every spent minute!</Review>
-            <Review>Too much beating around the bush...</Review>
-        </Reviews>
-    </Article>
-
-    <Article>
-        <Title>Does LSTM still make it?</Title>
-        <Annotation>What is the role of LSTMs in the real applications?</Annotation>
-        <Author>Antonio Armstrong</Author>
-        <Date>30.05.2017</Date>
-        <Reviews>
-            <Review>It's a good read!</Review>
-            <Review>Worth every spent minute!</Review>
-            <Review>Too much beating around the bush...</Review>
-        </Reviews>
-    </Article>
-
-    <Article>
-        <Title>Sleep and how to purge of it</Title>
-        <Annotation>Have you ever wondered if math logic is the only thing that makes you drawl?</Annotation>
-        <Author>Bou Door</Author>
-        <Date>08.11.2018</Date>
-        <Reviews>
-            <Review>You are absolutely off, guys!</Review>
-            <Review>Too much beating around the bush...</Review>
-        </Reviews>
-    </Article>
-
-    <Article>
-        <Title>Applications of gradient-based optimization methods in psychology</Title>
-        <Annotation>Find the gradient of your happiness!</Annotation>
-        <Category>Provocative</Category>
+        <Category>Math, optimizatoin, psychology.</Category>
         <Author>Julian Mandison</Author>
         <Date>01.01.2016</Date>
         <Reviews>
-            <Review>It's a good read!</Review>
-            <Review>Worth every spent minute!</Review>
-            <Review>Too much beating around the bush...</Review>
+            <Review>I will definitely recomend it to all my frends.</Review>
+            <Review>Superiour method!</Review>
+            <Review>I simple devoured this excellent article...</Review>
         </Reviews>
     </Article>
 
     <Article>
         <Title>Does LSTM still make it?</Title>
         <Annotation>What is the role of LSTMs in the real applications?</Annotation>
+        <Category>Machine learning, Recurrent Networks.</Category>
         <Author>Antonio Armstrong</Author>
         <Date>03.05.2017</Date>
         <Reviews>
@@ -135,13 +85,91 @@
     </Article>
 
     <Article>
-        <Title>Sleep and how to purge of it</Title>
+        <Title>Sleep and how to purge of it.</Title>
         <Annotation>Have you ever wondered if math logic is the only thing that makes you drawl?</Annotation>
         <Author>Bou Door</Author>
-        <Date>08.08.2018</Date>
+        <Date>08.01.2018</Date>
         <Reviews>
             <Review>You are absolutely off, guys!</Review>
+            <Review>It's beneath criticism...</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>How to find time to for traveling?</Title>
+        <Category>Lifestyle</Category>
+        <Author>Marine Kathley</Author>
+        <Date>11.09.2020</Date>
+        <Reviews>
+            <Review>So vividly related, the solution is ingenious.</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>A low-cost robot ready for any obstacle.</Title>
+        <Category>Robotics, Artificial intelligence</Category>
+        <Author>Aaron Aupperlee</Author>
+        <Date>16.11.2022</Date>
+        <Reviews>
+            <Review>Warn you, Skynet is near...</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>Applications of gradient-based optimization methods in psychology.</Title>
+        <Annotation>Find the gradient of your happiness!</Annotation>
+        <Category>Math, optimizatoin, psychology.</Category>
+        <Author>Julian Mandison</Author>
+        <Date>01.01.2016</Date>
+        <Reviews>
+            <Review>I will definitely recomend it to all my frends.</Review>
+            <Review>Superiour method!</Review>
+            <Review>I simple devoured this excellent article...</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>Does LSTM still make it?</Title>
+        <Annotation>What is the role of LSTMs in the real applications?</Annotation>
+        <Category>Machine learning, Recurrent Networks.</Category>
+        <Author>Antonio Armstrong</Author>
+        <Date>03.05.2017</Date>
+        <Reviews>
+            <Review>It's a good read!</Review>
+            <Review>Worth every spent minute!</Review>
             <Review>Too much beating around the bush...</Review>
         </Reviews>
     </Article>
+
+    <Article>
+        <Title>Sleep and how to purge of it.</Title>
+        <Annotation>Have you ever wondered if math logic is the only thing that makes you drawl?</Annotation>
+        <Author>Bou Door</Author>
+        <Date>08.01.2018</Date>
+        <Reviews>
+            <Review>You are absolutely off, guys!</Review>
+            <Review>It's beneath criticism...</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>How to find time to for traveling?</Title>
+        <Category>Lifestyle</Category>
+        <Author>Marine Kathley</Author>
+        <Date>11.09.2020</Date>
+        <Reviews>
+            <Review>So vividly related, the solution is ingenious.</Review>
+        </Reviews>
+    </Article>
+
+    <Article>
+        <Title>A low-cost robot ready for any obstacle.</Title>
+        <Category>Robotics, Artificial intelligence</Category>
+        <Author>Aaron Aupperlee</Author>
+        <Date>16.11.2022</Date>
+        <Reviews>
+            <Review>Warn you, Skynet is near...</Review>
+        </Reviews>
+    </Article>
+    
 </NewspaperData>

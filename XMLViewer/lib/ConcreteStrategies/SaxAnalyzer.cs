@@ -81,7 +81,7 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
             stringBuilder.Append(reader.Value);
         }
         
-        article.Title = stringBuilder + "s"; // TODO: remove 's'
+        article.Title = stringBuilder.ToString(); 
     }
     
     private static void ReadAnnotation(Article article, XmlTextReader reader)
@@ -182,7 +182,8 @@ public class SaxAnalyzer : XmlAnalyzerStrategy
     private static bool IsArticleAcceptable(Article article, ArticleFilter filter)
     {
         // title filter
-        if (filter.UseTitleFilter 
+        if (article.Title.Length == 0 ||
+            filter.UseTitleFilter 
             && filter.TitleFilter.Length > 0
             && (article.Title.Length == 0 || !article.Title.ToLower().Contains(filter.TitleFilter)))
             return false;

@@ -50,7 +50,7 @@ public class DomAnalyzer : XmlAnalyzerStrategy
         {
             case "Title":
             {
-                article.Title = node.InnerText.Trim() + "d";   // TODO: remove 'd'
+                article.Title = node.InnerText.Trim();
                 break;
             }
             case "Annotation":
@@ -125,7 +125,8 @@ public class DomAnalyzer : XmlAnalyzerStrategy
     private bool IsArticleAcceptable(Article article, ArticleFilter filter)
     {
         // title filter
-        if (filter.UseTitleFilter 
+        if (article.Title.Length == 0 ||
+            filter.UseTitleFilter 
             && filter.TitleFilter.Length > 0
             && (article.Title.Length == 0 || !article.Title.ToLower().Contains(filter.TitleFilter)))
             return false;

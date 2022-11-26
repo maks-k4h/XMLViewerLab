@@ -65,7 +65,7 @@ public class LinqAnalyzer : XmlAnalyzerStrategy
     {
         var article = new Article
         {
-            Title       = element.Element("Title")?.Value + "l" ?? "", // TODO: remove 'l'
+            Title       = element.Element("Title")?.Value ?? "",
             Annotation  = element.Element("Annotation")?.Value ?? "",
             Category    = element.Element("Category")?.Value ?? "",
             Author      = element.Element("Author")?.Value ?? "",
